@@ -3,7 +3,14 @@ package com.example.restfulservices.MyRestfulWebservice.user;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,11 +33,27 @@ public class UserResources {
 	}
 	
 	@GetMapping(path = "/users/{id}")
-	public User findUser(@PathVariable int id) {
+	public Resource<User> findUser(@PathVariable int id) {
 		User user = service.findUser(id);
 		if(user == null)
 			throw new UserNotFoundException("id =" + id);
-		return user;
+		
+		//"all-users", SERVER_PATH + "/users"
+				//retrieveAllUsers
+				Resource<User> resource = new Resource<User>(user);
+				
+				ControllerLinkBuilder linkTo = 
+						linkTo(methodOn(this.getClass()).findAll());
+				
+				resource.add(linkTo.withRel("all-users"));
+				
+				linkTo = linkTo(methodOn(this.getClass()).deleteUser(id));
+				
+				resource.add(linkTo.withRel("delete-user"));
+				//HATEOAS
+				
+		
+		return resource;
 	}
 
 	@DeleteMapping(path = "/users/{id}")
@@ -42,7 +65,7 @@ public class UserResources {
 	}
 	
 	@PostMapping(path = "/users")
-	public ResponseEntity<Object> createUser(@RequestBody User user) {
+	public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
 		User savedUser =service.save(user);
 		
 		URI location = ServletUriComponentsBuilder.

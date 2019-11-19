@@ -1,6 +1,7 @@
 package com.example.restfulservices.MyRestfulWebservice.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,14 +14,16 @@ public class UserDaoService {
 	private static int userCount = 4;
 	
 	static {
-		User user1 = new User(1, "Kapil", "04-01-1989");
+	
+		User user1 = new User(1, "Kapil", new Date());
 		users.add(user1);
-		User user2 = new User(2, "Alka", "14-09-1991");
+		User user2 = new User(2, "Alka", new Date());
 		users.add(user2);
-		User user3 = new User(3, "Takshii", "10-01-2018");
+		User user3 = new User(3, "Takshii", new Date());
 		users.add(user3);
-		User user4 = new User(4, "Srishti", "16-10-2006");
+		User user4 = new User(4, "Srishti", new Date());
 		users.add(user4);
+		
 	}
 	
 	public List<User> findAll() {
