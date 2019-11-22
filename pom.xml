@@ -87,6 +87,7 @@
    				<version>1.9.77</version>
    				 <configuration>
           			<appId>mywebservice-259810</appId>
+          			<version>1</version>
         </configuration>
 			</plugin>
 		</plugins>
